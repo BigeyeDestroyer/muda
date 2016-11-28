@@ -104,7 +104,7 @@ def load_jam_audio(jam_in, audio_file, **kwargs):
     return jam_pack(jam, _audio=dict(y=y, sr=sr))
 
 
-def save(filename_audio, filename_jam, jam, strict=True, **kwargs):
+def save(filename_audio, jam, strict=True, **kwargs):
     '''Save a muda jam to disk
 
     Parameters
@@ -130,7 +130,7 @@ def save(filename_audio, filename_jam, jam, strict=True, **kwargs):
     psf.write(filename_audio, y, sr, **kwargs)
 
     # Then dump the jam
-    jam.save(filename_jam, strict=strict)
+    # jam.save(filename_jam, strict=strict)
 
 
 def __reconstruct(params):
