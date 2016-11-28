@@ -123,8 +123,8 @@ def save(filename_audio, filename_jam, jam, strict=True, **kwargs):
 
     '''
 
-    y = jam.sandbox.muda._audio['y']
-    sr = jam.sandbox.muda._audio['sr']
+    y = jam.sandbox.muda['_audio']['y']
+    sr = jam.sandbox.muda['_audio']['sr']
 
     # First, dump the audio file
     psf.write(filename_audio, y, sr, **kwargs)
