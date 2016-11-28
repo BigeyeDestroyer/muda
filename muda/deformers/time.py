@@ -32,9 +32,12 @@ class AbstractTimeStretch(BaseTransformer):
     @staticmethod
     def audio(mudabox, state):
         # Deform the audio and metadata
-        mudabox._audio['y'] = pyrb.time_stretch(mudabox._audio['y'],
-                                                mudabox._audio['sr'],
-                                                state['rate'])
+        # mudabox._audio['y'] = pyrb.time_stretch(mudabox._audio['y'],
+        #                                         mudabox._audio['sr'],
+        #                                         state['rate'])
+        mudabox['_audio']['y'] = pyrb.time_stretch(mudabox['_audio']['y'],
+                                                   mudabox['_audio']['sr'],
+                                                   state['rate'])
 
     @staticmethod
     def metadata(metadata, state):
