@@ -7,12 +7,14 @@ import jams
 import librosa
 import soundfile as psf
 import jsonpickle
+from scipy.io import loadmat
 
 import six
 
 from .version import version
 
-__all__ = ['load_jam_audio', 'save', 'jam_pack', 'serialize', 'deserialize']
+__all__ = ['load_jam_audio', 'load_jam_mat', 'save', 'jam_pack', 'serialize', 'deserialize']
+
 
 def jam_pack(jam, **kwargs):
     '''Pack data into a jams sandbox.
@@ -96,7 +98,37 @@ def load_jam_audio(jam_in, audio_file, **kwargs):
     else:
         jam = jams.load(jam_in)
 
+    # By default, 'librosa.load'
+    # 1. resample the audio data to sr with 22050
+    # 2. convert it to mono by mean
     y, sr = librosa.load(audio_file, **kwargs)
+
+    if jam.file_metadata.duration is None:
+        jam.file_metadata.duration = librosa.get_duration(y=y, sr=sr)
+
+    return jam_pack(jam, _audio=dict(y=y, sr=sr))
+
+
+def load_jam_mat(jam_in, mat_file):
+    ''' Self-written function: Load a jam file and pack it with mat
+
+    Parameters
+    ----------
+    :param jam_in   : str, a jams file
+    :param mat_file : str, a mat file with extracted
+                      audio data, sr = 44100
+    '''
+
+    if isinstance(jam_in, jams.JAMS):
+        jam = jam_in
+    else:
+        jam = jams.load(jam_in)
+
+    # The '*.mat' file has already been
+    # resampled to 44100Hz
+    y = loadmat(mat_file)['y']
+    y = y.reshape((y.shape[0],))
+    sr = 44100
 
     if jam.file_metadata.duration is None:
         jam.file_metadata.duration = librosa.get_duration(y=y, sr=sr)
